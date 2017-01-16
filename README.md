@@ -1,5 +1,5 @@
 # Release hostages
-C implementation of the _classic_ hostages problem:
+C implementation of the _"classic"_ hostages problem:
 
 > There are 10 hostages in solitary cells.
 > There's a central living room with one light bulb; this bulb is initially off.
@@ -22,4 +22,16 @@ Some time ago, I created the [hostages-repository](https://github.com/metaodi/ho
 
 ```
 gcc -o hostages hostages.c
+```
+
+## Run the program
+
+```
+./hostages -c a -u 10 -h 10 -d 300 -s
+```
+
+The program provides several options to tweak the parameter of the simulation, use the help to list them all:
+
+```
+./hostages -H
 ```
