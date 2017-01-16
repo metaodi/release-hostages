@@ -1,21 +1,26 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <time.h>
+
 int units = 10;
 int anzhost = 7;
 int max_days = 500;
 int runs = 100;
 int show = 0;
-int pause = 0;
+int pause_time = 0;
 char commit = 'n';
 
 void usage(char *prog) {
 	fprintf(
 			stderr,
 			"\n%s usage:\t%s\t"
-				"-u (DEFAULT: 7)\n"
-				"\t\t\t\t\t-h (DEFAULT: 10)\n"
-				"\t\t\t\t\t-d (DEFAULT: 500)\n"
-				"\t\t\t\t\t-r (DEFAULT: 100)\n"
-				"\t\t\t\t\t-c (DEFAULT: n) [possible types: a(ll), s(uccess) only, m(issed) only, n(one)]\n"
-				"\t\t\t\t\t-s (DEFAULT: 0)\n\n\t-->"
+				"-u units, number of days to keep track (DEFAULT: 7)\n"
+				"\t\t\t\t\t-h number of hostages (DEFAULT: 10)\n"
+				"\t\t\t\t\t-d maximum days (DEFAULT: 500)\n"
+				"\t\t\t\t\t-r runs (DEFAULT: 100)\n"
+				"\t\t\t\t\t-c require commit for certain types (DEFAULT: n) [possible types: a(ll), s(uccess) only, m(issed) only, n(one)]\n"
+				"\t\t\t\t\t-s show mode (DEFAULT: 0)\n\n\t-->"
 				"If you call -s without a time parameter it uses the default pause,\n\tbut enables the show mode. (!!THIS MUST BE THE LAST ARGUMENT!!)\n\t is on MS Windows in milliseconds and on Linux in seconds (afaik)\n"
 				"\n\nIf you call %s without arguments, the default values will be taken.\n",
 			prog, prog, prog);
@@ -27,7 +32,6 @@ int options(int argc, char *argv[]) {
 	if (argc == 1) {
 		printf("\n\nUSE\n\t\t%s -H OR\n\t\t%s /?\nfor HELP\n\n", argv[0],
 				argv[0]);
-		sleep(1500);
 	}
 
 	if (argc > 13) {
@@ -85,9 +89,9 @@ int options(int argc, char *argv[]) {
 			show = 1;
 
 			if (argv[i + 1]) {
-				pause = atoi(argv[i + 1]);
+				pause_time = atoi(argv[i + 1]);
 
-				printf("SHOW MODE ON\nPAUSE: %i\n", pause);
+				printf("SHOW MODE ON\nPAUSE: %i\n", pause_time);
 
 				i++;
 
@@ -129,13 +133,11 @@ int options(int argc, char *argv[]) {
 	if (show == 1) {
 		printf("SHOW MODE: ON\n");
 
-		printf("PAUSE: %i", pause);
+		printf("PAUSE: %i", pause_time);
 
 	} else {
 		printf("SHOW MODE: OFF");
 	}
-
-	sleep(1500);
 
 	return 0;
 
@@ -165,11 +167,11 @@ int main(int argc, char *argv[]) {
 	int miss = 0;
 	//Counts all missed runs
 	int suc = 0;
-	//Counts sucessful runs
+	//Counts successful runs
 	float sucper, missper;
 	//stores the percent of suc and miss (relative to runs)
 	int days[runs];
-	//Counts how many days it took for a sucessful run
+	//Counts how many days it took for a successful run
 
 	//Initialize Day-Array with 0
 	for (x = 0; x < runs; x++) {
@@ -297,7 +299,7 @@ int main(int argc, char *argv[]) {
 				runs++;
 
 				//Sleep 1 second (1000 millisecond [MS WINDOWS style]), to get surely a random number (time(NULL))
-				sleep(pause);
+				sleep(pause_time);
 
 			}
 
@@ -308,8 +310,9 @@ int main(int argc, char *argv[]) {
 						dayc, y);
 
 				if (commit == 's' || commit == 'a') {
-					system("pause");
-
+					char line[1024];
+					printf("\n[Press Enter to continue]\n");
+					scanf("%[^\n]", line);
 				}
 			}
 
@@ -363,7 +366,7 @@ int main(int argc, char *argv[]) {
 	printf("\n\n\n------------------TOTAL-------------------------------");
 
 	printf(
-			"\n\nMISS: %i (%f %%)\n\nSUCESS: %i (%f %%)\n\n\nAverage days: %i\n\n\n",
+			"\n\nMISS: %i (%f %%)\n\nSUCCESS: %i (%f %%)\n\n\nAverage days: %i\n\n\n",
 			miss, missper, suc, sucper, dayc);
 
 	return 0;

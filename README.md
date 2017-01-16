@@ -17,3 +17,9 @@ Find more information about this code in [my blogpost from 2005](http://metaodi.
 
 I really like the hostages problem, because there is no one clear solution to it and you always have the impression that maybe you can optimize it further to get the hostage out a little earlier.
 Some time ago, I created the [hostages-repository](https://github.com/metaodi/hostages) to tackle the same problem in Python. And to actually compare different strategies against each other.
+
+## Compile the source
+
+```
+gcc -o hostages hostages.c
+```
